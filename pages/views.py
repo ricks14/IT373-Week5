@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseBadRequest
 from django.contrib import messages
-from pages.forms import PostForm
-from pages.models import Post
+from django.http import HttpResponseBadRequest
+from pages.forms import PostForm, CommentForm
+from pages.models import Post, Comment
 
-# Create your views here.
 def home(request):
     ctx = {"title": "Home", "features": ["Django", "Templates", "Static files"]}
     return render(request, "home.html", ctx)
@@ -16,7 +15,6 @@ def hello(request, name):
     return render(request, "hello.html", {"name": name})
 
 def gallery(request):
-    # Assume images placed in pages/static/img/
     images = ["img1.jpg", "img2.jpg", "img3.jpg"]
     return render(request, "gallery.html", {"images": images})
 
@@ -26,14 +24,12 @@ def page_not_found_view(request, exception):
 def server_error_view(request):
     return render(request, '500.html', status=500)
 
+
 def post_list(request):
-    # Model.objects.all()
     posts = Post.objects.all()
-    context = {
-        'posts': posts,
-        'title': 'Posts',
-    }
+    context = {'posts': posts, 'title': 'Posts'}
     return render(request, 'post_list.html', context)
+
 
 def post_create(request):
     if request.method == 'POST':
@@ -47,10 +43,30 @@ def post_create(request):
         form = PostForm()
     return render(request, 'post_form.html', {'form': form})
 
+
 def post_view(request, pk):
-    # post = get_object_or_404(Post, pk=pk)
-    post = Post.objects.get(pk=pk)
-    return render(request, 'post_view.html', {'post': post})
+    post = get_object_or_404(Post, pk=pk)
+    comments = post.comments.all().order_by('-created_at')
+
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            new_comment.save()
+            messages.success(request, 'Your comment was added!')
+            return redirect('post_view', pk=post.pk)
+        else:
+            messages.error(request, 'There was an error with your comment.')
+    else:
+        comment_form = CommentForm()
+
+    return render(request, 'post_view.html', {
+        'post': post,
+        'comments': comments,
+        'comment_form': comment_form,
+    })
+
 
 def post_update(request, pk):
     post = get_object_or_404(Post, pk=pk)
