@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+# *.sqlite3
+
+# Virtual env
+.venv/
+
+# Django
+staticfiles/
+media/
+
+# OS
+.DS_Store
+
+# Environment
+.env
+.env.*
+
+# Ignore Visual Studio cache and build files
+.vs/
+*.vsidx
