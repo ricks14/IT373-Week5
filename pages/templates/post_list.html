@@ -1,22 +1,26 @@
 {% extends 'base.html' %}
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
- <h1>Posts ({{ posts.count }})</h1>
- {% if messages %}
-      <ul>
-         {% for message in messages %}
-            <li>{{ message }}</li>
-         {% endfor %}
-      </ul>
-   {% endif %}
-   <hr>
- <ul>
-   {% for post in posts %}
-      <li>
-         <a href="{% url 'post_view' post.pk %}">{{ post.title }}</a>
-      </li>
-   {% empty %}
-      <p>No post yet.</p>
-   {% endfor %}
- </ul>
+<section class="card">
+    <h1>Posts ({{ posts.count }})</h1>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <hr>
+    <ul class="post-list">
+        {% for post in posts %}
+        <li>
+            <a href="{% url 'post_view' post.pk %}" class="post-link">{{ post.title }}</a>
+        </li>
+        {% empty %}
+        <p class="muted">No posts yet.</p>
+        {% endfor %}
+    </ul>
+</section>
 {% endblock %}

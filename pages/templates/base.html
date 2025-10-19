@@ -8,15 +8,26 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <nav>
-        <a href="{% url 'home' %}">Home</a> |
-        <a href="{% url 'about' %}">About</a> |
-        <a href="{% url 'gallery' %}">Gallery</a> |
-        <a href="{% url 'post_list' %}">Posts</a> |
-        <a href="{% url 'post_create' %}">Create</a>
-    </nav>
-    <main>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand"><a href="{% url 'home' %}">My Django App</a></div>
+            <div class="nav-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'about' %}">About</a>
+                <a href="{% url 'gallery' %}">Gallery</a>
+                <a href="{% url 'post_list' %}">Posts</a>
+                <a href="{% url 'post_create' %}">Create</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
         {% block content %}{% endblock %}
     </main>
+
+    <footer>
+        <p>&copy; 2025 Rulida, Ricky Jr. of Section 3D</p>
+        <p>Eastern Visayas State University</p>
+    </footer>
 </body>
 </html>

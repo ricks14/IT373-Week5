@@ -1,20 +1,30 @@
 {% extends 'base.html' %}
-{% block title %}
-   {{ form.instance.pk|yesno:"Edit Post, Create New Post" }}
-{% endblock %}
+{% block title %}{{ form.instance.pk|yesno:"Edit Post, Create New Post" }}{% endblock %}
 {% block content %}
-   {% if messages %}
-      <ul>
-         {% for message in messages %}
-            <li>{{ message }}</li>
-         {% endfor %}
-      </ul>
-   {% endif %}
-   <hr>
-   <h1>{{ form.instance.pk|yesno:"Edit Post, Create New Post" }}</h1>
-   <form method="POST">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">{{ form.instance.pk|yesno:"Update, Save" }}</button>
-   </form>
+<section class="card">
+    <h1>{{ form.instance.pk|yesno:"Edit Post, Create New Post" }}</h1>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="POST" class="styled-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        {% if form.errors %}
+        <div class="errorlist">
+            {{ form.errors }}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">
+            {{ form.instance.pk|yesno:"Update, Save" }}
+        </button>
+    </form>
+</section>
 {% endblock %}
